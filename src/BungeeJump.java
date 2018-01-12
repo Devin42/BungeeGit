@@ -1,9 +1,17 @@
+import org.opensourcephysics.controls.AbstractSimulation;
 
-//#firstcommit yo
-//pull test for alex
+public class BungeeJump extends AbstractSimulation{
 
-//hellllloo
-//Last try hopefully
-public class BungeeJump {
+	protected void doStep() {
+		
+	}
 
+	public void reset() {
+		
+	}
+	
+	public void initialize() {
+		
+	}
+	
 }
