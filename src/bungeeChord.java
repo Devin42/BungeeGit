@@ -1,8 +1,9 @@
 public class bungeeChord {
 
-	int k;
-	
-	int length;
-	int mass;
+	double cordLength;
+	double ropeMass;
+	double personMass;
+	double segmentNumber; //number of segments
+	double k; //spring constant
 	
 }
