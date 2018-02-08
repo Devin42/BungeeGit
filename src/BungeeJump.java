@@ -7,9 +7,11 @@ import org.opensourcephysics.frames.DisplayFrame;
 public class BungeeJump extends AbstractSimulation{
 
 	DisplayFrame ballFrame = new DisplayFrame("x", "y", "Ball Motion");
+	
 	Trail cord = new Trail();
-	double cordLegnth = 40;
+	double cordLength = 40;
 	double bridgeHeight = 100;
+	
 	double personMass = 50;
 	double ropeMass = 10;
 	double NOS = 50; //NOS: number of segments
@@ -19,7 +21,6 @@ public class BungeeJump extends AbstractSimulation{
 	protected void doStep() {
 
 		cord.clear();
-
 
 		k++;
 		System.out.println(k);
@@ -45,9 +46,10 @@ public class BungeeJump extends AbstractSimulation{
 		ballFrame.setVisible(true);
 		ballFrame.setBounds(100, 100, 500, 500);
 	}
-
+	
 	public static void main(String[] args){	
 		SimulationControl.createApp(new BungeeJump());
 	}
+	
 
 }
