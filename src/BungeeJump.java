@@ -6,50 +6,87 @@ import org.opensourcephysics.frames.DisplayFrame;
 
 public class BungeeJump extends AbstractSimulation{
 
-	DisplayFrame ballFrame = new DisplayFrame("x", "y", "Ball Motion");
+	DisplayFrame frame = new DisplayFrame("x", "y", "BungeeJump");
 	
-	Trail cord = new Trail();
-	double cordLength = 40;
-	double bridgeHeight = 100;
+	double cordLength;
+	double bridgeHeight;
 	
-	double personMass = 50;
-	double ropeMass = 10;
-	double NOS = 50; //NOS: number of segments
-	double k = 10; //spring constant
-	double k1 = NOS*k; //spring constant of one
+	double gravity;
+	
+	double personMass;
+	double cordMass;
+	
+	int segmentNumber;
+	int cordNumber;
 	
 	protected void doStep() {
 
-		cord.clear();
 
-		k++;
-		System.out.println(k);
-		
-		double[] xcoord = {1+k,2+k,3+k};
-		double[] ycoord = {1+k,2+k,3+k};
-
-		for(int i = 0; i < xcoord.length; i ++) {
-			cord.addPoint(xcoord[i], ycoord[i]);
-		}
 
 	}
 
 
 	public void reset() {
 
-		k = 0;
+		control.setValue("gravity", -9.81);
+		control.setValue("Person Mass", 50);
+		control.setValue("Cord Mass", 10);
+		control.setValue("Cord Length", 40);
+		control.setValue("Bridge Height", 100);
+		control.setValue("Number of Segments", 20);
+		control.setValue("Number of Cords", 1);
 		
 	}
 
 	public void initialize() {
-		ballFrame.addDrawable(cord);
-		ballFrame.setVisible(true);
-		ballFrame.setBounds(100, 100, 500, 500);
+		
+		gravity = control.getDouble("gravity");
+		personMass = control.getDouble("Person Mass");
+		cordMass = control.getDouble("Cord Mass");
+		cordLength = control.getDouble("Cord Length");
+		bridgeHeight = control.getDouble("Bridge Height");
+		segmentNumber = (int) control.getDouble("Number of Segments");
+		cordNumber = (int) control.getDouble("Number of Cords");
+		
+		
+		bungeeCord[] cordArray = new bungeeCord[cordNumber];
+		
+		for (int i = 0; i < cordNumber; i++) {
+			
+			bungeeCord bungee = new bungeeCord(cordLength, cordMass, personMass, segmentNumber);
+			
+			
+			cordArray[i] = bungee; 
+
+		}
+		
+		
+		
+		
+		
+		frame.setVisible(true);
+		
+	
+		
+		
+		
 	}
 	
 	public static void main(String[] args){	
 		SimulationControl.createApp(new BungeeJump());
 	}
 	
-
+	public void updatePosition (Segment segment) {
+		
+		segment.acceleration = gravity + springForce(segment);
+		
+		
+	}
+	
+	public double springForce (Segment segment) {
+		
+		return 3;
+	}
+	
+	
 }

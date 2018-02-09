@@ -1,16 +1,21 @@
+import org.opensourcephysics.display.Circle;
+
 public class bungeeCord {
 
 	double cordLength;
-	double ropeMass;
+	double cordMass;
 	double personMass;
-	double segmentNumber; //number of segments
+	int segmentNumber; //number of segments
 	double k; //spring constant
 	
-	public bungeeCord(double cordLength, double ropeMass, double personMass, double numberOfSegments) {
+	Segment[] segmentArray = new Segment[segmentNumber];
+	Circle[] circleArray = new Circle[segmentNumber];
+	
+	public bungeeCord(double cordLength, double cordMass, double personMass, int segmentNumber) {
 		this.cordLength = cordLength;
-		this.ropeMass = ropeMass;
+		this.cordMass = cordMass;
 		this.personMass = personMass;
-		this.segmentNumber = numberOfSegments;
+		this.segmentNumber = segmentNumber;
 	}
 	
 	
