@@ -1,4 +1,4 @@
-public class Segment {
+public class Particle {
 
 	double position;
 	

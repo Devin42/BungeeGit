@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import org.opensourcephysics.display.Circle;
 
 public class bungeeCord {
@@ -8,8 +10,8 @@ public class bungeeCord {
 	int segmentNumber; //number of segments
 	double k; //spring constant
 	
-	Segment[] segmentArray = new Segment[segmentNumber];
-	Circle[] circleArray = new Circle[segmentNumber];
+	ArrayList <Particle> particleArray = new ArrayList <Particle>();
+	ArrayList <Circle> circleArray = new ArrayList <Circle>();
 	
 	public bungeeCord(double cordLength, double cordMass, double personMass, int segmentNumber) {
 		this.cordLength = cordLength;
