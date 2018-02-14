@@ -2,9 +2,13 @@ public class Particle {
 
 	double position;
 	
+	double originalPosition;
+	
 	double velocity;
 	
 	double acceleration;
 	
-	double segmentPosition;
+	int orderPosition;
+	
+	double deltaX;
 }
