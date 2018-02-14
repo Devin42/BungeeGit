@@ -140,7 +140,7 @@ public class BungeeJump extends AbstractSimulation{
 		
 		else {
 			//Opposite of up spring force on next particle
-			double springDownForce = -(particleArray.get(particle.orderPosition + 1).deltaX ) * (springConstant/(particle.orderPosition + 1));
+			double springDownForce = -(particle.deltaX) * (springConstant/(particle.orderPosition + 1));
 			return gravityForce + personForce + restofCordForce + springUpForce + springDownForce;
 		}
 		
