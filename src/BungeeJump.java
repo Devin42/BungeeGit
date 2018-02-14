@@ -34,17 +34,22 @@ public class BungeeJump extends AbstractSimulation{
 
 		for (int i = 1; i < particleArray.size(); i++) {
 			
+			//Sets ∆x to the distance between the particle's original position and its current positions
 			particleArray.get(i).deltaX = particleArray.get(i).originalPosition - particleArray.get(i).position;
+		
+			//Sets circle position to particle position
 			circleArray.get(i).setY(particleArray.get(i).position);
+		
+			//Updates particle position based on net force
 			updatePosition(particleArray.get(i));
 			
 		}
 		
 	}
 
-
 	public void reset() {
 
+		//All values that can be changed by the user
 		control.setValue("gravity", -9.81);
 		control.setValue("Time Step", .01);
 		control.setValue("Spring Constant", 2600);
@@ -59,8 +64,11 @@ public class BungeeJump extends AbstractSimulation{
 
 	public void initialize() {
 		
+		//Frame settings
 		frame.setPreferredMinMax(-10, 10, -10, 150);
+		frame.setVisible(true);
 		
+		//Prefer to use global variables instead of having to write control.getDouble every time
 		gravity = control.getDouble("gravity");
 		timeStep = control.getDouble("Time Step");
 		springConstant = control.getDouble("Spring Constant");
@@ -71,37 +79,29 @@ public class BungeeJump extends AbstractSimulation{
 		segmentNumber = (int) control.getDouble("Number of Segments");
 		cordNumber = (int) control.getDouble("Number of Cords");
 		
-		bungeeCord[] bungeeArray = new bungeeCord[cordNumber];
-		
-		//Fills bungee array with cords based on user input values
-		for (int i = 0; i < cordNumber; i++) {
+		//Adds the circles representing each particle to the frame
+		for (int i = 0; i < segmentNumber; i++) {
 			
-			//bungeeCord bungee = new bungeeCord(cordLength, cordMass, personMass, segmentNumber);
+			Circle circle = new Circle();
+			Particle particle = new Particle();
 			
-			//Adds the circles representing each particle to the frame
-			for (int j = 0; j < segmentNumber; j++) {
-				
-				Circle circle = new Circle();
-				Particle particle = new Particle();
-				
-				particle.orderPosition = j;
-				
-				circle.pixRadius = 5;
-				
-				circle.setY(bridgeHeight - ((cordLength/segmentNumber)*j));
-				particle.position = bridgeHeight - ((cordLength/segmentNumber)*j);
-				
-				particle.originalPosition = bridgeHeight-((cordLength/segmentNumber)*j);
-				
-				particleArray.add(particle);
-				circleArray.add(circle);
-				
-				frame.addDrawable(circle);
-				
-			}
+			particle.orderPosition = i;
+			
+			circle.pixRadius = 5;
+			
+			//Sets particle and circle position so that they're evenly spaced along the length of the cord
+			circle.setY(bridgeHeight - ((cordLength/segmentNumber)*i));
+			particle.position = bridgeHeight - ((cordLength/segmentNumber)*i);
+			particle.originalPosition = bridgeHeight-((cordLength/segmentNumber)*i);
+			
+			//Adds circles and particle to the array
+			particleArray.add(particle);
+			circleArray.add(circle);
+			
+			//Adds circle to the frame
+			frame.addDrawable(circle);
 			
 		}
-		frame.setVisible(true);
 		
 	}
 	
@@ -109,6 +109,7 @@ public class BungeeJump extends AbstractSimulation{
 		SimulationControl.createApp(new BungeeJump());
 	}
 	
+	//Updates position of a particle based on the net force exterted on it
 	public void updatePosition (Particle particle) {
 		
 		particle.acceleration = netForce(particle)/(cordMass/segmentNumber);
