@@ -2,8 +2,6 @@ public class Particle {
 
 	double position;
 	
-	double originalPosition;
-	
 	double velocity;
 	double velocityLast;
 	

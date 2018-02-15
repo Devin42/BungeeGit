@@ -34,10 +34,12 @@ public class BungeeJump extends AbstractSimulation{
 			
 	protected void doStep() {
 		
-		this.setDelayTime(1);
+		System.out.println("Rectangle: " + (particleArray.get(1).velocity * timeStep));
 		
-		System.out.println(particleArray.get(1).velocity);
-		System.out.println(particleArray.get(1).velocityLast);
+		System.out.println("Trapezoid: " + ((particleArray.get(1).velocity + particleArray.get(1).velocityLast)/2 * timeStep));
+		System.out.println();
+		
+		this.setDelayTime(1);
 		
 		for (int i = 1; i < particleArray.size(); i++) {
 			
@@ -85,7 +87,6 @@ public class BungeeJump extends AbstractSimulation{
 		bridgeHeight = control.getDouble("Bridge Height");
 		segmentNumber = (int) control.getDouble("Number of Segments");
 		cordNumber = (int) control.getDouble("Number of Cords");
-		k1 = springConstant*segmentNumber;
 		
 		//Adds the circles representing each particle to the frame
 		for (int i = 0; i < segmentNumber; i++) {
@@ -104,7 +105,6 @@ public class BungeeJump extends AbstractSimulation{
 			//Sets particle and circle position so that they're evenly spaced along the length of the cord
 			circle.setY(bridgeHeight - ((cordLength/segmentNumber)*i));
 			particle.position = bridgeHeight - ((cordLength/segmentNumber)*i);
-			particle.originalPosition = bridgeHeight-((cordLength/segmentNumber)*i);
 			
 			//Adds circles and particle to the array
 			particleArray.add(particle);
@@ -129,9 +129,7 @@ public class BungeeJump extends AbstractSimulation{
 		
 		particle.acceleration = netForce(particle)/(cordMass/segmentNumber);
 		particle.velocity += particle.acceleration * timeStep;
-		particle.position += (particle.velocity + particle.velocityLast)/2 * timeStep;
-		
-		
+		particle.position += particle.velocity * timeStep;
 		
 	}
 	
@@ -140,15 +138,13 @@ public class BungeeJump extends AbstractSimulation{
 		
 		double gravityForce = (cordMass/segmentNumber) * gravity;
 		
-		particle.springForceUp = particle.deltaX * (k1/particle.orderPosition);
-		
-		springForces[particle.orderPosition - 1] = particle.springForceUp;
+		particle.springForceUp = particle.deltaX * (springConstant * segmentNumber);
 		
 		double personForce = personMass * gravity;
 		
 		if (particle.orderPosition == segmentNumber - 1) {
 			
-			return gravityForce + personForce + particle.springForceUp;
+			return personForce + particle.springForceUp;
 		}
 		
 		else {
@@ -160,11 +156,6 @@ public class BungeeJump extends AbstractSimulation{
 				particle.springForceDown += particleArray.get(i).acceleration * (cordMass/segmentNumber);
 				
 			}*/
-			
-			if (particle.orderPosition == segmentNumber - 2) {
-				//System.out.println("Second to last Particle ∆x: " + particle.deltaX);
-				//System.out.println("Second to last Particle SFU: " + particle.springForceUp);
-			}
 			
 			return gravityForce + particle.springForceUp + particle.springForceDown;
 		}
