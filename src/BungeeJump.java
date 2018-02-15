@@ -36,7 +36,8 @@ public class BungeeJump extends AbstractSimulation{
 		
 		this.setDelayTime(1);
 		
-		//System.out.println(netForce(particleArray.get(particleArray.size() - 1)));
+		System.out.println(particleArray.get(1).velocity);
+		System.out.println(particleArray.get(1).velocityLast);
 		
 		for (int i = 1; i < particleArray.size(); i++) {
 			
@@ -45,7 +46,7 @@ public class BungeeJump extends AbstractSimulation{
 			
 			//Sets circle position to particle position
 			circleArray.get(i).setY(particleArray.get(i).position);
-		
+			
 			//Updates particle position based on net force
 			updatePosition(particleArray.get(i));
 			
@@ -92,6 +93,10 @@ public class BungeeJump extends AbstractSimulation{
 			Circle circle = new Circle();
 			Particle particle = new Particle();
 			
+			if (i== segmentNumber - 1) {
+				circle.color = Color.BLUE;
+			}
+			
 			particle.orderPosition = i;
 			
 			circle.pixRadius = 5;
@@ -120,9 +125,14 @@ public class BungeeJump extends AbstractSimulation{
 	//Updates position of a particle based on the net force exterted on it
 	public void updatePosition (Particle particle) {
 		
+		particle.velocityLast = particle.velocity;
+		
 		particle.acceleration = netForce(particle)/(cordMass/segmentNumber);
 		particle.velocity += particle.acceleration * timeStep;
-		particle.position += particle.velocity * timeStep;
+		particle.position += (particle.velocity + particle.velocityLast)/2 * timeStep;
+		
+		
+		
 	}
 	
 	//Calculates the net force on a particle
@@ -152,8 +162,8 @@ public class BungeeJump extends AbstractSimulation{
 			}*/
 			
 			if (particle.orderPosition == segmentNumber - 2) {
-				System.out.println("Second to last Particle ∆x: " + particle.deltaX);
-				System.out.println("Second to last Particle SFU: " + particle.springForceUp);
+				//System.out.println("Second to last Particle ∆x: " + particle.deltaX);
+				//System.out.println("Second to last Particle SFU: " + particle.springForceUp);
 			}
 			
 			return gravityForce + particle.springForceUp + particle.springForceDown;
