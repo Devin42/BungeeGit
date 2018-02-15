@@ -34,6 +34,9 @@ public class BungeeJump extends AbstractSimulation{
 	double[] springForces; 
 			
 	protected void doStep() {
+		
+		this.setDelayTime(1);
+		
 		//System.out.println(netForce(particleArray.get(particleArray.size() - 1)));
 		
 		for (int i = 1; i < particleArray.size(); i++) {
@@ -141,7 +144,7 @@ public class BungeeJump extends AbstractSimulation{
 		
 		else {
 
-			particle.springForceDown = particleArray.get(particle.orderPosition + 1).springForceUp;
+			particle.springForceDown = -particleArray.get(particle.orderPosition + 1).springForceUp;
 			
 			if (particle.orderPosition == segmentNumber - 2) {
 				System.out.println("Second to last Particle SFD: " + particle.springForceDown);
