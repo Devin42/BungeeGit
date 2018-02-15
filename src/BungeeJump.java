@@ -34,11 +34,7 @@ public class BungeeJump extends AbstractSimulation{
 			
 	protected void doStep() {
 		
-		System.out.println("Rectangle: " + (particleArray.get(1).velocity * timeStep));
-		
-		System.out.println("Trapezoid: " + ((particleArray.get(1).velocity + particleArray.get(1).velocityLast)/2 * timeStep));
-		System.out.println();
-		
+		//Makes doStep run faster
 		this.setDelayTime(1);
 		
 		for (int i = 1; i < particleArray.size(); i++) {
@@ -150,13 +146,6 @@ public class BungeeJump extends AbstractSimulation{
 		else {
 
 			particle.springForceDown = -particleArray.get(particle.orderPosition + 1).springForceUp;
-			
-			/*for (int i = particle.orderPosition; i < segmentNumber; i++) {
-				
-				particle.springForceDown += particleArray.get(i).acceleration * (cordMass/segmentNumber);
-				
-			}*/
-			
 			return gravityForce + particle.springForceUp + particle.springForceDown;
 		}
 		
