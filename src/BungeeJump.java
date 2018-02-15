@@ -29,13 +29,15 @@ public class BungeeJump extends AbstractSimulation{
 	int z = 0;
 	ArrayList <Particle> particleArray = new ArrayList <Particle>();
 	ArrayList <Circle> circleArray = new ArrayList <Circle>();
-	
-	protected void doStep() {
 
+	double[] springForces; 
+			
+	protected void doStep() {
+		System.out.println(particleArray.get(2).deltaX);
 		for (int i = 1; i < particleArray.size(); i++) {
 			
 			//Sets ∆x to the distance between the particle's original position and its current positions
-			particleArray.get(i).deltaX = particleArray.get(i).originalPosition - particleArray.get(i).position;
+			particleArray.get(i).deltaX = (particleArray.get(i - 1).position- particleArray.get(i).position) - (cordLength/segmentNumber);
 		
 			//Sets circle position to particle position
 			circleArray.get(i).setY(particleArray.get(i).position);
@@ -52,12 +54,12 @@ public class BungeeJump extends AbstractSimulation{
 		//All values that can be changed by the user
 		control.setValue("gravity", -9.81);
 		control.setValue("Time Step", .01);
-		control.setValue("Spring Constant", 2600);
+		control.setValue("Spring Constant", 30);
 		control.setValue("Person Mass", 50);
 		control.setValue("Cord Mass", 10);
 		control.setValue("Cord Length", 40);
 		control.setValue("Bridge Height", 100);
-		control.setValue("Number of Segments", 80);
+		control.setValue("Number of Segments", 20);
 		control.setValue("Number of Cords", 1);
 		
 	}
@@ -100,8 +102,9 @@ public class BungeeJump extends AbstractSimulation{
 			
 			//Adds circle to the frame
 			frame.addDrawable(circle);
-			
 		}
+		
+		springForces = new double[segmentNumber - 1];
 		
 	}
 	
@@ -120,32 +123,23 @@ public class BungeeJump extends AbstractSimulation{
 	//Calculates the net force on a particle
 	public double netForce (Particle particle) {
 		
-		//Force of gravity only from the particle's own mass: Particle mass * gravity
 		double gravityForce = (cordMass/segmentNumber) * gravity;
 		
-		//Force of gravity from all particles below this particle: (Number of particles below) * (Particle Mass) * gravity
-		double restofCordForce = (segmentNumber - particle.orderPosition) * (cordMass/segmentNumber) * gravity;
+		double springForceUp = particle.deltaX * springConstant;
 		
-		//Force of gravity from the person: Person mass * gravity
+		springForces[particle.orderPosition - 1] = springForceUp;
+		
 		double personForce = personMass * gravity;
 		
-		//Force of the bungee chord on the particle upwards. ∆x is the particle's position compared to its starting position. To find k, we 
-		//use the spring in a series equation, 1/k = 1/k1+1/k2+... Since all the spring constants are the same for each spring, we can write the
-		//equation of the spring constant at the nth particle as 1/k=n/k0 (where k0 is the overall bungee spring constant). We multiply out and get
-		//that k=k0/n
-		double springUpForce = particle.deltaX * (springConstant/particle.orderPosition);
-		
 		if (particle.orderPosition == segmentNumber - 1) {
-			return gravityForce + personForce + restofCordForce + springUpForce;
+		//	System.out.println(springForceUp);
+			return gravityForce + personForce + springForceUp;
 		}
 		
 		else {
-			//Opposite of up spring force on next particle
-			double springDownForce = -(particle.deltaX) * (springConstant/(particle.orderPosition + 1));
-			return gravityForce + personForce + restofCordForce + springUpForce + springDownForce;
+			double springForceDown = -springForces[particle.orderPosition - 1];
+			return gravityForce + springForceUp + springForceDown;
 		}
-		
-		
 		
 		
 		
