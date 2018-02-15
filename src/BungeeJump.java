@@ -34,7 +34,8 @@ public class BungeeJump extends AbstractSimulation{
 	double[] springForces; 
 			
 	protected void doStep() {
-		System.out.println(particleArray.get(2).deltaX);
+		//System.out.println(netForce(particleArray.get(particleArray.size() - 1)));
+		
 		for (int i = 1; i < particleArray.size(); i++) {
 			
 			//Sets ∆x to the distance between the particle's original position and its current positions
@@ -127,20 +128,26 @@ public class BungeeJump extends AbstractSimulation{
 		
 		double gravityForce = (cordMass/segmentNumber) * gravity;
 		
-		double springForceUp = particle.deltaX * (k1/particle.orderPosition);
+		particle.springForceUp = particle.deltaX * (k1/particle.orderPosition);
 		
-		springForces[particle.orderPosition - 1] = springForceUp;
+		springForces[particle.orderPosition - 1] = particle.springForceUp;
 		
 		double personForce = personMass * gravity;
 		
 		if (particle.orderPosition == segmentNumber - 1) {
-		//	System.out.println(springForceUp);
-			return gravityForce + personForce + springForceUp;
+			System.out.println("Last Particle SFU:" + particle.springForceUp);
+			return gravityForce + personForce + particle.springForceUp;
 		}
 		
 		else {
-			double springForceDown = -springForces[particle.orderPosition - 1];
-			return gravityForce + springForceUp + springForceDown;
+
+			particle.springForceDown = particleArray.get(particle.orderPosition + 1).springForceUp;
+			
+			if (particle.orderPosition == segmentNumber - 2) {
+				System.out.println("Second to last Particle SFD: " + particle.springForceDown);
+			}
+			
+			return gravityForce + particle.springForceUp + particle.springForceDown;
 		}
 		
 		

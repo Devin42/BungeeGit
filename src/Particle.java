@@ -11,4 +11,8 @@ public class Particle {
 	int orderPosition;
 	
 	double deltaX;
+	
+	double springForceUp;
+	
+	double springForceDown;
 }
