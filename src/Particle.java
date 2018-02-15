@@ -5,6 +5,7 @@ public class Particle {
 	double originalPosition;
 	
 	double velocity;
+	double velocityLast;
 	
 	double acceleration;
 	

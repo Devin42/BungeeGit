@@ -27,7 +27,6 @@ public class BungeeJump extends AbstractSimulation{
 	int segmentNumber;
 	int cordNumber;
 	
-	int z = 0;
 	ArrayList <Particle> particleArray = new ArrayList <Particle>();
 	ArrayList <Circle> circleArray = new ArrayList <Circle>();
 
@@ -43,7 +42,7 @@ public class BungeeJump extends AbstractSimulation{
 			
 			//Sets ∆x to the distance between the particle's original position and its current positions
 			particleArray.get(i).deltaX = (particleArray.get(i - 1).position- particleArray.get(i).position) - (cordLength/segmentNumber);
-		
+			
 			//Sets circle position to particle position
 			circleArray.get(i).setY(particleArray.get(i).position);
 		
@@ -55,7 +54,7 @@ public class BungeeJump extends AbstractSimulation{
 	}
 
 	public void reset() {
-
+		
 		//All values that can be changed by the user
 		control.setValue("gravity", -9.81);
 		control.setValue("Time Step", .01);
@@ -138,7 +137,7 @@ public class BungeeJump extends AbstractSimulation{
 		double personForce = personMass * gravity;
 		
 		if (particle.orderPosition == segmentNumber - 1) {
-			System.out.println("Last Particle SFU:" + particle.springForceUp);
+			
 			return gravityForce + personForce + particle.springForceUp;
 		}
 		
@@ -146,17 +145,20 @@ public class BungeeJump extends AbstractSimulation{
 
 			particle.springForceDown = -particleArray.get(particle.orderPosition + 1).springForceUp;
 			
+			/*for (int i = particle.orderPosition; i < segmentNumber; i++) {
+				
+				particle.springForceDown += particleArray.get(i).acceleration * (cordMass/segmentNumber);
+				
+			}*/
+			
 			if (particle.orderPosition == segmentNumber - 2) {
-				System.out.println("Second to last Particle SFD: " + particle.springForceDown);
+				System.out.println("Second to last Particle ∆x: " + particle.deltaX);
+				System.out.println("Second to last Particle SFU: " + particle.springForceUp);
 			}
 			
 			return gravityForce + particle.springForceUp + particle.springForceDown;
 		}
 		
-		
-		
-		
 	}
-	
 	
 }
