@@ -20,6 +20,7 @@ public class BungeeJump extends AbstractSimulation{
 	double personMass;
 	double cordMass;
 	double springConstant;
+	double k1;
 	
 	double timeStep;
 	
@@ -80,6 +81,7 @@ public class BungeeJump extends AbstractSimulation{
 		bridgeHeight = control.getDouble("Bridge Height");
 		segmentNumber = (int) control.getDouble("Number of Segments");
 		cordNumber = (int) control.getDouble("Number of Cords");
+		k1 = springConstant*segmentNumber;
 		
 		//Adds the circles representing each particle to the frame
 		for (int i = 0; i < segmentNumber; i++) {
@@ -125,7 +127,7 @@ public class BungeeJump extends AbstractSimulation{
 		
 		double gravityForce = (cordMass/segmentNumber) * gravity;
 		
-		double springForceUp = particle.deltaX * springConstant;
+		double springForceUp = particle.deltaX * (k1/particle.orderPosition);
 		
 		springForces[particle.orderPosition - 1] = springForceUp;
 		
