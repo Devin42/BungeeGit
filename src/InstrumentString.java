@@ -84,6 +84,41 @@ public class InstrumentString extends AbstractSimulation{
 		
 	}
 	
+	public double[] angleBetweenTwoPlanets(Particle P1, Particle P2) {
+
+		double angleinfo[] = new double[3];
+		double signC = 1;
+		double signS = 1;
+
+		double angle;
+		
+		double xDiff = P2.xPosition - P1.xPosition;
+		double yDiff = P2.yPosition - P1.yPosition;
+		
+		if(xDiff == 0) {
+			angle = Math.PI/2;
+		}
+		else if(yDiff == 0) {
+			angle = 0;
+		}
+		else {
+			angle = Math.abs(Math.atan(yDiff/xDiff));
+		}
+		
+		if(P1.xPosition > P2.xPosition) {
+			signC = -1;
+		}
+		if(P1.yPosition > P2.yPosition) {
+			signS = -1;
+		}
+		
+		angleinfo[0] = angle;
+		angleinfo[1] = signC;
+		angleinfo[2] = signS;
+		
+		return angleinfo;
+	}
+	
 	
 	public static void main(String[] args) {
 		SimulationControl.createApp(new InstrumentString());
