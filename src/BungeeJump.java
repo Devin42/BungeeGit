@@ -41,10 +41,10 @@ public class BungeeJump extends AbstractSimulation{
 		for (int i = 1; i < particleArray.size(); i++) {
 			
 			//Sets ∆x to the difference between the particle's current distance from the one above it and the particle's original distance from the one above it
-			particleArray.get(i).deltaX = (particleArray.get(i - 1).position- particleArray.get(i).position) - (cordLength/((segmentNumber - 1)));
+			particleArray.get(i).deltaX = (particleArray.get(i - 1).yPosition- particleArray.get(i).yPosition) - (cordLength/((segmentNumber - 1)));
 			
 			//Sets circle position to particle position
-			circleArray.get(i).setY(particleArray.get(i).position);
+			circleArray.get(i).setY(particleArray.get(i).yPosition);
 			
 			//Updates particle position based on net force
 			updatePosition(particleArray.get(i));
@@ -100,7 +100,7 @@ public class BungeeJump extends AbstractSimulation{
 		
 			//Sets particle and circle position so that they're evenly spaced along the length of the cord
 			circle.setY(bridgeHeight - ((cordLength/segmentNumber)*i));
-			particle.position = bridgeHeight - ((cordLength/segmentNumber)*i);
+			particle.yPosition = bridgeHeight - ((cordLength/segmentNumber)*i);
 			
 			//Adds circles and particle to the array
 			particleArray.add(particle);
@@ -131,13 +131,13 @@ public class BungeeJump extends AbstractSimulation{
 	public void updatePosition (Particle particle) {
 		
 		//Uses Fnet = ma to find the particle's acceleration
-		particle.acceleration = netForce(particle)/(cordMass/segmentNumber);
+		particle.yAcceleration = netForce(particle)/(cordMass/segmentNumber);
 		
 		//Finds the particle's velocity based on acceleration
-		particle.velocity += particle.acceleration * timeStep;
+		particle.yVelocity += particle.yAcceleration * timeStep;
 		
 		//Finds the particle's position based on velocity
-		particle.position += particle.velocity * timeStep;
+		particle.yPosition += particle.yVelocity * timeStep;
 		
 	}
 	

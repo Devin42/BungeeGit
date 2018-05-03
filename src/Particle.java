@@ -1,13 +1,16 @@
 public class Particle {
 
 	//Particle's position, only need one because it's one dimensional motion
-	double position;
+	double xPosition;
+	double yPosition;
 	
 	//Particle's velocity
-	double velocity;
+	double xVelocity;
+	double yVelocity;
 	
 	//Particle's acceleration
-	double acceleration;
+	double xAcceleration;
+	double yAcceleration;
 	
 	//How far down the cord the particle
 	int orderPosition;
