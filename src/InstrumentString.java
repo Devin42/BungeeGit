@@ -18,8 +18,9 @@ public class InstrumentString extends AbstractSimulation{
 	//Cord variables
 	double cordLength;
 	double cordMass;
-	double springConstant;
+	double totalspringConstant;
 	double numMasses;
+	double individualSpringConstant;
 	double timeStep;
 	
 	//ArrayList that holds all the particles, as well as an ArrayList for the corresponding circles that show up on the frame
@@ -47,7 +48,8 @@ public class InstrumentString extends AbstractSimulation{
 		
 		//Prefer to use global variables instead of having to write control.getDouble every time
 		timeStep = control.getDouble("Time Step");
-		springConstant = control.getDouble("Spring Constant");
+		totalspringConstant = control.getDouble("Spring Constant");
+		individualSpringConstant = totalspringConstant*numMasses;
 		cordMass = control.getDouble("Cord Mass");
 		cordLength = control.getDouble("Cord Length");
 		numMasses= control.getDouble("Number of Masses");
@@ -70,6 +72,9 @@ public class InstrumentString extends AbstractSimulation{
 			particle.xPosition = i * (cordLength/numMasses);
 			circle.setX(i * (cordLength/numMasses));
 			
+			particleArray.add(particle);
+			circleArray.add(circle);
+			
 			frame.addDrawable(circle);
 		}
 		
@@ -79,12 +84,20 @@ public class InstrumentString extends AbstractSimulation{
 		
 		//Force from the particle before
 		Particle previousParticle = particleArray.get(particle.orderPosition - 1);
+		Particle nextParticle = particleArray.get(particle.orderPosition+1);
+		
+		
+		double[] angleInfPrev = angleBetweenTwoParticles(particle, previousParticle);
+		double[] angleInfNext = angleBetweenTwoParticles(particle, nextParticle);
+
+		double FTx = angleInfNext[1]*individualSpringConstant*distanceFrom(nextParticle, particle)*Math.cos(angleInfNext[0]) + angleInfPrev[1]*individualSpringConstant*distanceFrom(previousParticle, particle)*Math.cos(angleInfNext[0]);
+		
 		
 		
 		
 	}
 	
-	public double[] angleBetweenTwoPlanets(Particle P1, Particle P2) {
+	public double[] angleBetweenTwoParticles(Particle P1, Particle P2) {
 
 		double angleinfo[] = new double[3];
 		double signC = 1;
@@ -117,6 +130,11 @@ public class InstrumentString extends AbstractSimulation{
 		angleinfo[2] = signS;
 		
 		return angleinfo;
+	}
+	public double distanceFrom(Particle P1, Particle P2) {
+		double distanceFrom = Math.sqrt(Math.pow((P1.xPosition - P2.xPosition), 2) + Math.pow((P1.yPosition - P2.yPosition), 2));
+		
+		return distanceFrom;
 	}
 	
 	
