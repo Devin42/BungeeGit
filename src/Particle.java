@@ -1,5 +1,7 @@
 public class Particle {
 
+	double mass;
+	
 	//Particle's position, only need one because it's one dimensional motion
 	double xPosition;
 	double yPosition;
