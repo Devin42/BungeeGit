@@ -48,7 +48,7 @@ public class InstrumentString extends AbstractSimulation{
 	}
 	
 	public void reset() {
-		control.setValue("Time Step", .0001);
+		control.setValue("Time Step", .000001);
 		control.setValue("Spring Constant", 2000);
 		control.setValue("Cord Mass", .01);
 		control.setValue("Cord Length", 1);
