@@ -26,6 +26,8 @@ public class InstrumentString extends AbstractSimulation{
 	double timeStep;
 	double totalTime;
 	
+	boolean amp = false;
+	
 	//ArrayList that holds all the particles, as well as an ArrayList for the corresponding circles that show up on the frame
 	ArrayList <Particle> particleArray = new ArrayList <Particle>();
 	ArrayList <Circle> circleArray = new ArrayList <Circle>();
@@ -35,12 +37,22 @@ public class InstrumentString extends AbstractSimulation{
 		//Makes program fun faster
 		for (int z = 0; z < 100; z++) {
 		
-			particleArray.get(0).yPositionLast = particleArray.get(0).yPosition;
+			//if (!amp) {
+				
+				particleArray.get(0).yPositionLast = particleArray.get(0).yPosition;
+				
+				particleArray.get(0).yPosition = amplitude * Math.sin(2 * Math.PI * frequency * totalTime);
+				circleArray.get(0).setY(particleArray.get(0).yPosition);
+				
+				/*if (particleArray.get(0).yPosition == amplitude) {
+					amp = true;
+				}*/
+				
+			//}
 			
-			particleArray.get(0).yPosition = amplitude * Math.sin(2 * Math.PI * frequency * totalTime);
-			circleArray.get(0).setY(particleArray.get(0).yPosition);
-			
-			
+			//else {
+				
+		//	}
 			
 			for (int i = 1; i < numMasses - 1; i++) {
 				updatePosition(particleArray.get(i));
