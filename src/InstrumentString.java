@@ -125,8 +125,8 @@ public class InstrumentString extends AbstractSimulation{
 		Particle nextParticle = particleArray.get(particle.orderPosition + 1);
 		
 		//Forces in the x direction from both particles (kx * cos)
-		double previousForce = individualSpringConstant * distanceFrom(previousParticle, particle) * 
-		(previousParticle.xPosition - particle.xPosition)/distanceFrom(previousParticle,particle);
+		double previousForce = individualSpringConstant * distanceFromLast(previousParticle, particle) * 
+		(previousParticle.xPositionLast - particle.xPosition)/distanceFromLast(previousParticle,particle);
 		
 		double nextForce = individualSpringConstant * distanceFrom(nextParticle, particle) * 
 		(nextParticle.xPosition - particle.xPosition)/distanceFrom(nextParticle,particle);
@@ -143,8 +143,8 @@ public class InstrumentString extends AbstractSimulation{
 		Particle nextParticle = particleArray.get(particle.orderPosition + 1);
 		
 		//Forces in the x direction from both particles (kx * cos)
-		double previousForce = individualSpringConstant * distanceFrom(previousParticle, particle) * 
-		(previousParticle.yPosition - particle.yPosition)/distanceFrom(previousParticle,particle);
+		double previousForce = individualSpringConstant * distanceFromLast(previousParticle, particle) * 
+		(previousParticle.yPositionLast - particle.yPosition)/distanceFromLast(previousParticle,particle);
 		
 		double nextForce = individualSpringConstant * distanceFrom(nextParticle, particle) * 
 		(nextParticle.yPosition - particle.yPosition)/distanceFrom(nextParticle,particle);
@@ -155,6 +155,9 @@ public class InstrumentString extends AbstractSimulation{
 	
 	//Updates the position of the particle
 	public void updatePosition (Particle particle) {
+		
+		particle.xPositionLast = particle.xPosition;
+		particle.yPositionLast = particle.yPosition;
 		
 		particle.xAcceleration = xForce(particle)/particle.mass;
 		particle.yAcceleration = yForce(particle)/particle.mass;
@@ -205,6 +208,10 @@ public class InstrumentString extends AbstractSimulation{
 	//Returns the distance between two particles
 	public double distanceFrom(Particle P1, Particle P2) {
 		return Math.sqrt(Math.pow((P1.xPosition - P2.xPosition), 2) + Math.pow((P1.yPosition - P2.yPosition), 2));
+	}
+	
+	public double distanceFromLast (Particle P1, Particle P2) {
+		return Math.sqrt(Math.pow((P1.xPositionLast - P2.xPosition), 2) + Math.pow((P1.yPositionLast - P2.yPosition), 2));
 	}
 	
 	public static void main(String[] args) {

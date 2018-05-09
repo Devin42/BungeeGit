@@ -6,6 +6,9 @@ public class Particle {
 	double xPosition;
 	double yPosition;
 	
+	double xPositionLast;
+	double yPositionLast;
+	
 	//Particle's velocity
 	double xVelocity;
 	double yVelocity;
