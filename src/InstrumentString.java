@@ -16,6 +16,8 @@ public class InstrumentString extends AbstractSimulation{
 	
 	//1m string, 100 mass, 10g total
 	//Cord variables
+	double frequency;
+	double amplitude;
 	double cordLength;
 	double cordMass;
 	double totalSpringConstant;
@@ -33,8 +35,12 @@ public class InstrumentString extends AbstractSimulation{
 		//Makes program fun faster
 		for (int z = 0; z < 100; z++) {
 		
-			particleArray.get(0).yPosition = .1*Math.sin(totalTime);
-			circleArray.get(0).setY(.1*Math.sin(totalTime));
+			particleArray.get(0).yPositionLast = particleArray.get(0).yPosition;
+			
+			particleArray.get(0).yPosition = amplitude * Math.sin(2 * Math.PI * frequency * totalTime);
+			circleArray.get(0).setY(particleArray.get(0).yPosition);
+			
+			
 			
 			for (int i = 1; i < numMasses - 1; i++) {
 				updatePosition(particleArray.get(i));
@@ -49,7 +55,9 @@ public class InstrumentString extends AbstractSimulation{
 	
 	public void reset() {
 		control.setValue("Time Step", .000001);
-		control.setValue("Spring Constant", 2000);
+		control.setValue("Frequency", 50);
+		control.setValue("Amplitude", .1);
+		control.setValue("Spring Constant", 100);
 		control.setValue("Cord Mass", .01);
 		control.setValue("Cord Length", 1);
 		control.setValue("Number of Masses", 50);
@@ -67,6 +75,8 @@ public class InstrumentString extends AbstractSimulation{
 		
 		//Prefer to use global variables instead of having to write control.getDouble every time
 		timeStep = control.getDouble("Time Step");
+		frequency = control.getDouble("Frequency");
+		amplitude = control.getDouble("Amplitude");
 		totalSpringConstant = control.getDouble("Spring Constant");
 		cordMass = control.getDouble("Cord Mass");
 		cordLength = control.getDouble("Cord Length");
@@ -100,23 +110,6 @@ public class InstrumentString extends AbstractSimulation{
 		
 	}
 
-	/*public void netForce (Particle particle) {
-		
-		//Force from the particle before
-		Particle previousParticle = particleArray.get(particle.orderPosition - 1);
-		Particle nextParticle = particleArray.get(particle.orderPosition+1);
-		
-		
-		double[] angleInfPrev = angleBetweenTwoParticles(particle, previousParticle);
-		double[] angleInfNext = angleBetweenTwoParticles(particle, nextParticle);
-
-		double FTx = angleInfNext[1]*individualSpringConstant*distanceFrom(nextParticle, particle)*Math.cos(angleInfNext[0]) + angleInfPrev[1]*individualSpringConstant*distanceFrom(previousParticle, particle)*Math.cos(angleInfNext[0]);
-		
-		
-		
-		
-	}*/
-	
 	//Returns the force in the x direction on a particle
 	public double xForce (Particle particle) {
 		
@@ -168,41 +161,6 @@ public class InstrumentString extends AbstractSimulation{
 		particle.xPosition += particle.xVelocity * timeStep;
 		particle.yPosition += particle.yVelocity * timeStep;
 		
-	}
-	
-	public double[] angleBetweenTwoParticles(Particle P1, Particle P2) {
-
-		double angleinfo[] = new double[3];
-		double signC = 1;
-		double signS = 1;
-
-		double angle;
-		
-		double xDiff = P2.xPosition - P1.xPosition;
-		double yDiff = P2.yPosition - P1.yPosition;
-		
-		if(xDiff == 0) {
-			angle = Math.PI/2;
-		}
-		else if(yDiff == 0) {
-			angle = 0;
-		}
-		else {
-			angle = Math.abs(Math.atan(yDiff/xDiff));
-		}
-		
-		if(P1.xPosition > P2.xPosition) {
-			signC = -1;
-		}
-		if(P1.yPosition > P2.yPosition) {
-			signS = -1;
-		}
-		
-		angleinfo[0] = angle;
-		angleinfo[1] = signC;
-		angleinfo[2] = signS;
-		
-		return angleinfo;
 	}
 	
 	//Returns the distance between two particles
