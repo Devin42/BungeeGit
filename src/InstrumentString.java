@@ -24,6 +24,7 @@ public class InstrumentString extends AbstractSimulation{
 	double numMasses;
 	double individualSpringConstant;
 	double timeStep;
+	double numPeaks;
 	double totalTime;
 	double timesR = 0;
 	double timesR2 = 0;
@@ -96,6 +97,7 @@ public class InstrumentString extends AbstractSimulation{
 		control.setValue("Cord Mass", .01);
 		control.setValue("Cord Length", 1);
 		control.setValue("Number of Masses", 50);
+		control.setValue("Number of Peaks", 3);
 	}
 
 	public void initialize() {
@@ -116,6 +118,7 @@ public class InstrumentString extends AbstractSimulation{
 		cordMass = control.getDouble("Cord Mass");
 		cordLength = control.getDouble("Cord Length");
 		numMasses= control.getDouble("Number of Masses");
+		numPeaks = control.getDouble("Number of Peaks");
 		individualSpringConstant = totalSpringConstant*numMasses;
 
 		//Adds the circles representing each particle to the frame
