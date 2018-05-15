@@ -28,6 +28,7 @@ public class InstrumentString extends AbstractSimulation{
 	double totalTime;
 	double timesR = 0;
 	double timesR2 = 0;
+	double restLength;
 	
 	boolean amp = false;
 
@@ -48,8 +49,10 @@ public class InstrumentString extends AbstractSimulation{
 				particleArray.get(0).yPosition = amplitude * Math.sin(2 * Math.PI * frequency * totalTime);
 				circleArray.get(0).setY(particleArray.get(0).yPosition);
 
-				if ((particleArray.get(0).yPositionLast > 0 && particleArray.get(0).yPosition < 0) ||(particleArray.get(0).yPositionLast < 0 && particleArray.get(0).yPosition > 0)) {
-					if(timesR > 4) {
+				if ((particleArray.get(0).yPositionLast > 0 && particleArray.get(0).yPosition < 0) 
+					||(particleArray.get(0).yPositionLast < 0 && particleArray.get(0).yPosition > 0)) {
+					
+					if(timesR > (numPeaks*2)-2) {
 						amp = true;
 						particleArray.get(0).yPosition = 0;
 						particleArray.get(0).xPosition = 0;			
@@ -59,22 +62,13 @@ public class InstrumentString extends AbstractSimulation{
 
 			}
 
-			/*else {
-				updatePosition1(particleArray.get(0));
-				circleArray.get(0).setXY(particleArray.get(0).xPosition, particleArray.get(0).yPosition);
-			}*/
-
 			for (int i = 1; i < numMasses - 1; i++) {
 				updatePosition(particleArray.get(i));
 				circleArray.get(i).setXY(particleArray.get(i).xPosition, particleArray.get(i).yPosition);
 
 			}
 			
-			
 			int half = (int)(0.5*(particleArray.size()));
-			
-			/*System.out.println(particleArray.size());
-			System.out.println(half);*/
 			
 			if(timesR2 % 50000 == 0) {
 				t50.clear();
@@ -96,8 +90,9 @@ public class InstrumentString extends AbstractSimulation{
 		control.setValue("Spring Constant", 100);
 		control.setValue("Cord Mass", .01);
 		control.setValue("Cord Length", 1);
-		control.setValue("Number of Masses", 50);
+		control.setValue("Number of Masses", 75);
 		control.setValue("Number of Peaks", 3);
+		control.setValue("Rest Length", .005);
 	}
 
 	public void initialize() {
@@ -106,19 +101,20 @@ public class InstrumentString extends AbstractSimulation{
 		this.setDelayTime(0);
 
 		//Frame settings
-		frame.setPreferredMinMax(-.1, 1.5, -.15, .15);
-		frame.setSize(600, 600);
+		frame.setPreferredMinMax(-.1, 1.1, -.15, .15);
+		frame.setSize(1200, 600);
 		frame.setVisible(true);
 	
 		//Prefer to use global variables instead of having to write control.getDouble every time
 		timeStep = control.getDouble("Time Step");
-		frequency = control.getDouble("Frequency");
 		amplitude = control.getDouble("Amplitude");
 		totalSpringConstant = control.getDouble("Spring Constant");
 		cordMass = control.getDouble("Cord Mass");
 		cordLength = control.getDouble("Cord Length");
 		numMasses= control.getDouble("Number of Masses");
 		numPeaks = control.getDouble("Number of Peaks");
+		restLength = control.getDouble("Rest Length");
+		frequency = control.getDouble("Frequency") * numPeaks;
 		individualSpringConstant = totalSpringConstant*numMasses;
 
 		//Adds the circles representing each particle to the frame
@@ -160,10 +156,10 @@ public class InstrumentString extends AbstractSimulation{
 		Particle nextParticle = particleArray.get(particle.orderPosition + 1);
 
 		//Forces in the x direction from both particles (kx * cos)
-		double previousForce = individualSpringConstant * distanceFromLast(previousParticle, particle) * 
+		double previousForce = individualSpringConstant * (distanceFromLast(previousParticle, particle) - restLength) * 
 				(previousParticle.xPositionLast - particle.xPosition)/distanceFromLast(previousParticle,particle);
 
-		double nextForce = individualSpringConstant * distanceFrom(nextParticle, particle) * 
+		double nextForce = individualSpringConstant * (distanceFrom(nextParticle, particle) - restLength) * 
 				(nextParticle.xPosition - particle.xPosition)/distanceFrom(nextParticle,particle);
 
 		return nextForce + previousForce;
@@ -194,7 +190,7 @@ public class InstrumentString extends AbstractSimulation{
 		//Particles before and after the current one on the string
 		Particle nextParticle = particleArray.get(particle.orderPosition + 1);
 
-		double nextForce = individualSpringConstant * distanceFrom(nextParticle, particle) * 
+		double nextForce = individualSpringConstant * (distanceFrom(nextParticle, particle)-restLength) * 
 				(nextParticle.xPosition - particle.xPosition)/distanceFrom(nextParticle,particle);
 
 		return nextForce;
