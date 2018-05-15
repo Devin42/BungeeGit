@@ -109,7 +109,7 @@ public class InstrumentString extends AbstractSimulation{
 		frame.setPreferredMinMax(-.1, 1.5, -.15, .15);
 		frame.setSize(600, 600);
 		frame.setVisible(true);
-
+	
 		//Prefer to use global variables instead of having to write control.getDouble every time
 		timeStep = control.getDouble("Time Step");
 		frequency = control.getDouble("Frequency");
