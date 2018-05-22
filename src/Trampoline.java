@@ -34,6 +34,7 @@ public class Trampoline extends AbstractSimulation{
 		
 		for (int z = 0; z < 100; z++) {
 		
+			centerParticle.zPositionLast = centerParticle.zPosition;
 			centerParticle.zPosition = .1 * Math.sin(totalTime);
 			centerSphere.setZ(centerParticle.zPosition);
 			
@@ -122,7 +123,9 @@ public class Trampoline extends AbstractSimulation{
 			
 			springArray.add(spring);
 			springSphereArray.add(springSpheres);
+			
 		}
+		
 		
 	}
 
@@ -171,7 +174,6 @@ public class Trampoline extends AbstractSimulation{
 		double nextForce = individualSpringConstant * (distanceFrom(nextParticle, particle) - restLength) * 
 				(nextParticle.zPosition - particle.zPosition)/distanceFrom(nextParticle,particle);
 		
-		System.out.println((previousParticle.zPositionLast - particle.zPosition));
 		return nextForce + previousForce;
 	}
 
