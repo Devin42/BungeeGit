@@ -85,7 +85,6 @@ public class Trampoline extends AbstractSimulation{
 		centerSphere.setSizeXYZ(.1, .1, .1);
 		centerSphere.getStyle().setFillColor(Color.RED);
 		
-		
 		frame.addElement(centerSphere);
 		
 		for (int i = 0; i < springNumber; i++) {
@@ -172,6 +171,7 @@ public class Trampoline extends AbstractSimulation{
 		double nextForce = individualSpringConstant * (distanceFrom(nextParticle, particle) - restLength) * 
 				(nextParticle.zPosition - particle.zPosition)/distanceFrom(nextParticle,particle);
 		
+		System.out.println((previousParticle.zPositionLast - particle.zPosition));
 		return nextForce + previousForce;
 	}
 
@@ -180,15 +180,19 @@ public class Trampoline extends AbstractSimulation{
 
 		particle.xPositionLast = particle.xPosition;
 		particle.yPositionLast = particle.yPosition;
+		particle.zPositionLast = particle.zPosition;
 
 		particle.xAcceleration = xForce(particle)/particle.mass;
 		particle.yAcceleration = yForce(particle)/particle.mass;
+		particle.zAcceleration = zForce(particle)/particle.mass;
 
 		particle.xVelocity += particle.xAcceleration * timeStep;
 		particle.yVelocity += particle.yAcceleration * timeStep;
+		particle.zVelocity += particle.zAcceleration * timeStep;
 
 		particle.xPosition += particle.xVelocity * timeStep;
 		particle.yPosition += particle.yVelocity * timeStep;
+		particle.zPosition += particle.zVelocity * timeStep;
 
 		}
 	
