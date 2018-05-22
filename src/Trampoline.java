@@ -42,10 +42,10 @@ public class Trampoline extends AbstractSimulation{
 				
 				for (int j = 1; j < springArray.get(i).size() - 1; j++) {
 					updatePosition(springArray.get(i).get(j));
+					
 					springSphereArray.get(i).get(j).setXYZ(springArray.get(i).get(j).xPosition, springArray.get(i).get(j).yPosition, 
 					springArray.get(i).get(j).zPosition);
 				}
-				
 			}
 			
 			totalTime += timeStep;
@@ -114,6 +114,14 @@ public class Trampoline extends AbstractSimulation{
 				particle.orderPosition = j + 1;
 				particle.mass = springMass/particlesPerSpring;
 				
+				if (j == particlesPerSpring - 1) {
+					sphere.getStyle().setFillColor(Color.GREEN);
+				}
+				
+				if (j == 1) {
+					sphere.getStyle().setFillColor(Color.YELLOW);
+				}
+				
 				spring.add(particle);
 				springSpheres.add(sphere);
 				
@@ -125,8 +133,6 @@ public class Trampoline extends AbstractSimulation{
 			springSphereArray.add(springSpheres);
 			
 		}
-		
-		
 	}
 
 	//Calculates the force in the x direction on a particle
