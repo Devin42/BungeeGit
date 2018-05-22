@@ -140,7 +140,6 @@ public class Trampoline extends AbstractSimulation{
 		double nextForce = individualSpringConstant * (distanceFrom(nextParticle, particle) - restLength) * 
 				(nextParticle.xPosition - particle.xPosition)/distanceFrom(nextParticle,particle);
 		
-		System.out.println(nextForce + previousForce);
 		return nextForce + previousForce;
 	}
 	
