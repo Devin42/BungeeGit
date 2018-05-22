@@ -35,12 +35,13 @@ public class Trampoline extends AbstractSimulation{
 		for (int z = 0; z < 100; z++) {
 		
 			centerParticle.zPositionLast = centerParticle.zPosition;
-			centerParticle.zPosition = .1 * Math.sin(totalTime);
+			centerParticle.zPosition = .2 * Math.sin(totalTime);
 			centerSphere.setZ(centerParticle.zPosition);
 			
 			for (int i = 0; i < springArray.size(); i++) {
 				
 				for (int j = 1; j < springArray.get(i).size() - 1; j++) {
+					
 					updatePosition(springArray.get(i).get(j));
 					
 					springSphereArray.get(i).get(j).setXYZ(springArray.get(i).get(j).xPosition, springArray.get(i).get(j).yPosition, 
@@ -55,7 +56,7 @@ public class Trampoline extends AbstractSimulation{
 	public void reset() {
 		
 		control.setValue("Time Step", 1E-3);
-		control.setValue("Number of Springs", 8);
+		control.setValue("Number of Springs", 15);
 		control.setValue("Particles Per Spring", 10);
 		control.setValue("Trampoline Radius", 1);
 		control.setValue("Spring Constant", 100);
@@ -94,6 +95,7 @@ public class Trampoline extends AbstractSimulation{
 			ArrayList<Element> springSpheres = new ArrayList<Element>();
 			
 			spring.add(centerParticle);
+			springSpheres.add(centerSphere);
 			
 			for (int j = 0; j < particlesPerSpring; j++) {
 				
@@ -114,16 +116,12 @@ public class Trampoline extends AbstractSimulation{
 				particle.orderPosition = j + 1;
 				particle.mass = springMass/particlesPerSpring;
 				
+				spring.add(particle);
+				springSpheres.add(sphere);
+				
 				if (j == particlesPerSpring - 1) {
 					sphere.getStyle().setFillColor(Color.GREEN);
 				}
-				
-				if (j == 1) {
-					sphere.getStyle().setFillColor(Color.YELLOW);
-				}
-				
-				spring.add(particle);
-				springSpheres.add(sphere);
 				
 				frame.addElement(sphere);
 				
