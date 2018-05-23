@@ -147,7 +147,7 @@ public class Trampoline extends AbstractSimulation{
 			p1.zPosition = 0;
 			p1.xVelocity = 0;
 			p1.yVelocity = 0;
-			p1.zVelocity = 0;
+			p1.zVelocity = -5;
 			p1.xAcceleration = 0;
 			p1.yAcceleration = 0;
 			p1.zAcceleration = 0;
@@ -281,8 +281,8 @@ public class Trampoline extends AbstractSimulation{
 		
 		double forceDownP = 0;
 		
-		if(p1.zAcceleration < 0) {
-			 forceDownP = p1.mass*p1.zAcceleration;
+		if(p1.zVelocity > centerParticle.zVelocity) {
+			 forceDownP = p1.mass*p1.zAcceleration+p1.mass*g;
 		}
 		
 
