@@ -9,7 +9,7 @@ import org.opensourcephysics.display3d.simple3d.ElementCone;
 import org.opensourcephysics.display3d.simple3d.ElementEllipsoid;
 import org.opensourcephysics.frames.Display3DFrame;
 
-public class Trampoline extends AbstractSimulation{
+public class TrampolineFirst extends AbstractSimulation{
 
 	Display3DFrame frame = new Display3DFrame("Trampoline");
 
@@ -91,7 +91,7 @@ public class Trampoline extends AbstractSimulation{
 		centerParticle.yPosition = 0;
 		centerParticle.zPosition = 0;
 		centerParticle.mass = 10;
-		centerParticle.individualSpringConstant = individualSpringConstant*10;
+		centerParticle.individualSpringConstant = individualSpringConstant;
 
 		centerSphere.setXYZ(0, 0, 0);
 		centerSphere.setSizeXYZ(.1, .1, .1);
@@ -104,7 +104,7 @@ public class Trampoline extends AbstractSimulation{
 		//Cone settings
 		cone.setXYZ(0, 0, 0);
 		cone.setSizeXYZ(2 * trampolineRadius, 2 * trampolineRadius, 0);
-		cone.getStyle().setFillColor(new Color(0,0,0,70));
+		cone.getStyle().setFillColor(new Color(0,0,0,100));
 		frame.addElement(cone);
 		
 		
@@ -139,7 +139,7 @@ public class Trampoline extends AbstractSimulation{
 				particle.mass = springMass/particlesPerSpring;
 				
 				if(j < (particlesPerSpring - 2)) {
-					particle.individualSpringConstant = individualSpringConstant*10;
+					particle.individualSpringConstant = individualSpringConstant;
 				}
 
 				spring.add(particle);
@@ -170,59 +170,48 @@ public class Trampoline extends AbstractSimulation{
 	}
 
 	//Calculates the force in the x direction on a particle
-	public double xForce (Particle particle, double individualSpringConstant) {
+	public double xForce (Particle particle) {
 
 		Particle previousParticle = springArray.get(particle.springPosition).get(particle.orderPosition - 1);
 		Particle nextParticle = springArray.get(particle.springPosition).get(particle.orderPosition + 1);
-		
-		double spPrev = (individualSpringConstant*previousParticle.individualSpringConstant)/(individualSpringConstant+previousParticle.individualSpringConstant);
-		double spNext = (individualSpringConstant*nextParticle.individualSpringConstant)/(individualSpringConstant+nextParticle.individualSpringConstant);
 
 		//Forces in the x direction from both particles (kx * cos)
-		double previousForce = spPrev * (distanceFromLast(previousParticle, particle) - restLength) * 
+		double previousForce = previousParticle.individualSpringConstant * (distanceFromLast(previousParticle, particle) - restLength) * 
 				(previousParticle.xPositionLast - particle.xPosition)/distanceFromLast(previousParticle,particle);
 
-		double nextForce = spNext * (distanceFrom(nextParticle, particle) - restLength) * 
+		double nextForce = individualSpringConstant * (distanceFrom(nextParticle, particle) - restLength) * 
 				(nextParticle.xPosition - particle.xPosition)/distanceFrom(nextParticle,particle);
 
 		return nextForce + previousForce;
 	}
 
 	//Calculates the force in the y direction on a particle
-	public double yForce (Particle particle, double individualSpringConstant) {
+	public double yForce (Particle particle) {
 
 		Particle previousParticle = springArray.get(particle.springPosition).get(particle.orderPosition - 1);
 		Particle nextParticle = springArray.get(particle.springPosition).get(particle.orderPosition + 1);
 
-		double spPrev = (individualSpringConstant*previousParticle.individualSpringConstant)/(individualSpringConstant+previousParticle.individualSpringConstant);
-		double spNext = (individualSpringConstant*nextParticle.individualSpringConstant)/(individualSpringConstant+nextParticle.individualSpringConstant);
-
-		
 		//Forces in the x direction from both particles (kx * cos)
-		double previousForce = spPrev * (distanceFromLast(previousParticle, particle) - restLength) * 
+		double previousForce = individualSpringConstant * (distanceFromLast(previousParticle, particle) - restLength) * 
 				(previousParticle.yPositionLast - particle.yPosition)/distanceFromLast(previousParticle,particle);
 
-		double nextForce = spNext * (distanceFrom(nextParticle, particle) - restLength) * 
+		double nextForce = individualSpringConstant * (distanceFrom(nextParticle, particle) - restLength) * 
 				(nextParticle.yPosition - particle.yPosition)/distanceFrom(nextParticle,particle);
 
 		return nextForce + previousForce;
 	}
 
 	//Calculates the force in the z direction on a particle
-	public double zForce (Particle particle, double individualSpringConstant) {
+	public double zForce (Particle particle) {
 
 		Particle previousParticle = springArray.get(particle.springPosition).get(particle.orderPosition - 1);
 		Particle nextParticle = springArray.get(particle.springPosition).get(particle.orderPosition + 1);
-		
-		double spPrev = (individualSpringConstant*previousParticle.individualSpringConstant)/(individualSpringConstant+previousParticle.individualSpringConstant);
-		double spNext = (individualSpringConstant*nextParticle.individualSpringConstant)/(individualSpringConstant+nextParticle.individualSpringConstant);
 
-		
 		//Forces in the x direction from both particles (kx * cos)
-		double previousForce = spPrev * (distanceFromLast(previousParticle, particle) - restLength) * 
+		double previousForce = individualSpringConstant * (distanceFromLast(previousParticle, particle) - restLength) * 
 				(previousParticle.zPositionLast - particle.zPosition)/distanceFromLast(previousParticle,particle);
 
-		double nextForce = spNext * (distanceFrom(nextParticle, particle) - restLength) * 
+		double nextForce = individualSpringConstant * (distanceFrom(nextParticle, particle) - restLength) * 
 				(nextParticle.zPosition - particle.zPosition)/distanceFrom(nextParticle,particle);
 
 		return nextForce + previousForce;
@@ -235,9 +224,9 @@ public class Trampoline extends AbstractSimulation{
 		particle.yPositionLast = particle.yPosition;
 		particle.zPositionLast = particle.zPosition;
 
-		particle.xAcceleration = xForce(particle, particle.individualSpringConstant)/particle.mass;
-		particle.yAcceleration = yForce(particle, particle.individualSpringConstant)/particle.mass;
-		particle.zAcceleration = zForce(particle, particle.individualSpringConstant)/particle.mass;
+		particle.xAcceleration = xForce(particle)/particle.mass;
+		particle.yAcceleration = yForce(particle)/particle.mass;
+		particle.zAcceleration = zForce(particle)/particle.mass;
 
 		particle.xVelocity += particle.xAcceleration * timeStep;
 		particle.yVelocity += particle.yAcceleration * timeStep;
@@ -302,7 +291,7 @@ public class Trampoline extends AbstractSimulation{
 		/*double previousForce = individualSpringConstant * (distanceFromLast(previousParticle, particle) - restLength) * 
 				(previousParticle.zPositionLast - particle.zPosition)/distanceFromLast(previousParticle,particle);*/
 
-		double nextForce = springNumber * centerParticle.individualSpringConstant/2 * (distanceFrom(nextParticle, particle) - restLength) * 
+		double nextForce = springNumber * individualSpringConstant * (distanceFrom(nextParticle, particle) - restLength) * 
 				(nextParticle.zPosition - particle.zPosition)/distanceFrom(nextParticle,particle);
 		
 		double forceDownP = 0;
@@ -322,7 +311,7 @@ public class Trampoline extends AbstractSimulation{
 		double Fg = p1.mass*g;
 		
 		if(centerParticle.zPosition < 0 && p1.zPosition <= centerParticle.zPosition) {
-			Fsp = -1*springNumber*centerParticle.individualSpringConstant/2*centerParticle.zPosition;
+			Fsp = -1*springNumber*individualSpringConstant*centerParticle.zPosition;
 		}
 		
 		return Fsp-Fg;
@@ -342,6 +331,6 @@ public class Trampoline extends AbstractSimulation{
 	}
 
 	public static void main(String[] args) {
-		SimulationControl.createApp(new Trampoline());
+		SimulationControl.createApp(new TrampolineFirst());
 	}
 }

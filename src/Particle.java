@@ -33,4 +33,7 @@ public class Particle {
 	
 	//The force from the spring below the particle
 	double springForceDown;
+	
+	//indiv K
+	double individualSpringConstant;
 }
