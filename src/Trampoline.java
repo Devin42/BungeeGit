@@ -141,6 +141,9 @@ public class Trampoline extends AbstractSimulation{
 				if(j < (particlesPerSpring - 2)) {
 					particle.individualSpringConstant = individualSpringConstant*10;
 				}
+				else {
+					particle.individualSpringConstant = individualSpringConstant;
+				}
 
 				spring.add(particle);
 				springSpheres.add(sphere);
