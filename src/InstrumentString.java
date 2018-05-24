@@ -92,7 +92,7 @@ public class InstrumentString extends AbstractSimulation{
 		control.setValue("Cord Length", 1);
 		control.setValue("Number of Masses", 75);
 		control.setValue("Number of Peaks", 3);
-		control.setValue("Rest Length", .005);
+		control.setValue("Rest Length", 0);
 	}
 
 	public void initialize() {
